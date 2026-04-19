@@ -17,7 +17,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: JSON.parse(localStorage.getItem('auth_user') || 'null'),
   isAuthenticated: !!localStorage.getItem('auth_user'),
-  apiUrl: localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || '',
+  // Priorité absolue à la variable d'environnement pour une synchro multi-appareils
+  apiUrl: import.meta.env.VITE_API_URL || localStorage.getItem('api_url') || '',
   
   login: async (email: string) => {
     const role: 'admin' | 'user' = email.toLowerCase() === 'admin@example.com' ? 'admin' : 'user';
