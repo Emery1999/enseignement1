@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { MASTER_API_URL } from './constants';
 
 interface User {
   email: string;
@@ -17,8 +18,10 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: JSON.parse(localStorage.getItem('auth_user') || 'null'),
   isAuthenticated: !!localStorage.getItem('auth_user'),
-  // Priorité absolue à la variable d'environnement pour une synchro multi-appareils
-  apiUrl: import.meta.env.VITE_API_URL || localStorage.getItem('api_url') || '',
+  // Priorité 1: Le lien en dur (Infaillible pour GitHub Pages)
+  // Priorité 2: Variable d'environnement
+  // Priorité 3: Cache local
+  apiUrl: MASTER_API_URL || import.meta.env.VITE_API_URL || localStorage.getItem('api_url') || '',
   
   login: async (email: string) => {
     const role: 'admin' | 'user' = email.toLowerCase() === 'admin@example.com' ? 'admin' : 'user';

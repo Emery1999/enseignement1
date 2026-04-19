@@ -12,16 +12,9 @@ import { FavorisView } from './views/FavorisView';
 import { SettingsView } from './views/SettingsView';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, apiUrl } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  
-  // If API URL is missing and we aren't already on the settings page, redirect there.
-  // Note: We check the current hash because we are using HashRouter
-  const isSettingsPage = window.location.hash.includes('/settings');
-  if (!apiUrl && !isSettingsPage) {
-    return <Navigate to="/settings" replace />;
-  }
   
   return <Layout>{children}</Layout>;
 }
