@@ -1,0 +1,39 @@
+import { create } from 'zustand';
+
+interface User {
+  email: string;
+  role: 'admin' | 'user';
+}
+
+interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  apiUrl: string;
+  login: (email: string) => Promise<void>;
+  logout: () => void;
+  setApiUrl: (url: string) => void;
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
+  user: JSON.parse(localStorage.getItem('auth_user') || 'null'),
+  isAuthenticated: !!localStorage.getItem('auth_user'),
+  apiUrl: localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || '',
+  
+  login: async (email: string) => {
+    const role: 'admin' | 'user' = email.toLowerCase() === 'admin@example.com' ? 'admin' : 'user';
+    const user = { email, role };
+    
+    localStorage.setItem('auth_user', JSON.stringify(user));
+    set({ user, isAuthenticated: true });
+  },
+  
+  logout: () => {
+    localStorage.removeItem('auth_user');
+    set({ user: null, isAuthenticated: false });
+  },
+
+  setApiUrl: (url: string) => {
+    localStorage.setItem('api_url', url);
+    set({ apiUrl: url });
+  },
+}));

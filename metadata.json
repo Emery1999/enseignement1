@@ -1,0 +1,6 @@
+{
+  "name": "Enseignements",
+  "description": "Application premium de gestion d'enseignements audio avec intégration Google Sheets et Google Drive.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
